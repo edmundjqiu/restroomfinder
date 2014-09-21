@@ -303,29 +303,29 @@ public class Emergency extends Activity
     public void stonyTour(View view)
     {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(STONY, 13));
-        map.addMarker(new MarkerOptions()
-                .title("Stony Brook University")
-                .snippet("Excellent STEM programs here")
-                .position(STONY));
+//        map.addMarker(new MarkerOptions()
+//                .title("Stony Brook University")
+//                .snippet("Excellent STEM programs here")
+//                .position(STONY));
     }
 
     public void columbiaTour(View view)
     {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(COLUMBIA, 13));
-        map.addMarker(new MarkerOptions()
-                .title("Columbia University")
-                .snippet("NYC school")
-                .position(COLUMBIA));
+//        map.addMarker(new MarkerOptions()
+//                .title("Columbia University")
+//                .snippet("NYC school")
+//                .position(COLUMBIA));
     }
 
 
     public void flushingTour(View view)
     {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(FLUSHING, 13));
-        map.addMarker(new MarkerOptions()
-                .title("Flushing")
-                .snippet("Basically the Chinatown of Queens NY")
-                .position(FLUSHING));
+//        map.addMarker(new MarkerOptions()
+//                .title("Flushing")
+//                .snippet("Basically the Chinatown of Queens NY")
+//                .position(FLUSHING));
 
     }
 
