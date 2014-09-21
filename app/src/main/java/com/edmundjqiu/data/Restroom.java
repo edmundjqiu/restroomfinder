@@ -11,10 +11,10 @@ public class Restroom {
     private int free;
     private RestroomReview[] reviews;
 
-    public Restroom(String name, double longitude, double latitude, int free, RestroomReview[] reviews) {
+    public Restroom(String name, double latitude, double longitude, int free, RestroomReview[] reviews) {
         this.name = name;
-        this.longitude = longitude;
         this.latitude = latitude;
+        this.longitude = longitude;
         this.free = free;
         this.reviews = reviews;
     }

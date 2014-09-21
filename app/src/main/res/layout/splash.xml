@@ -18,7 +18,7 @@
         android:textSize="64dp"
         android:textColor="#454545"
         android:gravity="center_horizontal"
-        android:text='"I really need\n to shit."'
+        android:text='"NATURE\nCALLS"'
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

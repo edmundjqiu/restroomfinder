@@ -7,7 +7,7 @@ import android.os.Handler;
 
 public class SplashActivity extends Activity {
 
-    private static final int SPLASH_SCREEN_PAUSE = 2000;
+    private static final int SPLASH_SCREEN_PAUSE = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void run() {
                     // After the pause, start the real main activity, end this one
-                    Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent i = new Intent(SplashActivity.this, Emergency.class);
                     startActivity(i);
                     finish();
                 }
