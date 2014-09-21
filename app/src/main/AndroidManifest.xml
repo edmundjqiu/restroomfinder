@@ -37,6 +37,7 @@
 
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".Emergency"></activity>
+        <activity android:name=".NewFacility"></activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
