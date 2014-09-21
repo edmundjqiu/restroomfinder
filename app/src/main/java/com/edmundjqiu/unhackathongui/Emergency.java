@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -51,6 +52,7 @@ public class Emergency extends Activity
     private static final LatLng COLUMBIA = new LatLng(40.807979, -73.963912);
     private static final LatLng STONY = new LatLng(40.912327, -73.123153);
 
+    private HashMap<Marker, Restroom> markerToRestroom;
 
     private Marker dragMarker;
     ArrayAdapter<String> adapter; // array adapter for the ListView
@@ -60,6 +62,7 @@ public class Emergency extends Activity
 
         dragMarker = null;
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        markerToRestroom = new HashMap<Marker, Restroom>();
 
         // Load all the data points into memory
         load("http://unhack.brianyang.me/unhack.json");
@@ -83,6 +86,22 @@ public class Emergency extends Activity
                 new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
+                        // Clicking the "new facility" marker doesn't count
+                        if (!marker.equals(dragMarker))
+                        {
+
+                            Restroom markedRestroom = markerToRestroom.get(marker);
+                            Intent i = new Intent(getApplicationContext(),
+                                    Display.class);
+
+
+                            i.putExtra("name", markedRestroom.getName());
+                            i.putExtra("free", markedRestroom.getFree());
+                            i.putExtra("review", markedRestroom.getReviews());
+                            startActivity(i);
+
+
+                        }
                         return false;
                     }
                 }
@@ -200,6 +219,7 @@ public class Emergency extends Activity
             final String RR_FREE = "free";
             final String RR_REVS = "reviews";
 
+            Log.d("JSON: ",restroomJsonStr);
             JSONObject restroomJson = new JSONObject(restroomJsonStr);
             JSONArray restroomArray = restroomJson.getJSONArray(RR_LIST);
 
@@ -233,6 +253,7 @@ public class Emergency extends Activity
                     int rating = reviewObject.getInt("rating");
                     String content = reviewObject.getString("content");
                     RestroomReview currentReview = new RestroomReview(reviewer, date, rating, content);
+                    reviewsList[j] = currentReview;
                 }
 
                 Restroom currentRestroom = new Restroom(name, lat, lon, free, reviewsList);
@@ -269,6 +290,7 @@ public class Emergency extends Activity
                             .snippet(snippet)
                             .position(coord)
                     );
+                    markerToRestroom.put(m, restrooms);
 
                     Log.d("Here's my marker: ", m.getPosition().toString() + " " + m.getTitle());
 

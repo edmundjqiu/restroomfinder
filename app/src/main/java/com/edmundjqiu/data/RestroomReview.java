@@ -1,11 +1,12 @@
 package com.edmundjqiu.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Brian on 9/21/2014.
  */
-public class RestroomReview {
+public class RestroomReview implements Serializable {
     private String reviewer;
     private String date;
     private int rating;
