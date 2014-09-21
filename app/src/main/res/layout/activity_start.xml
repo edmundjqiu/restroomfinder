@@ -54,5 +54,15 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/emergency"
             android:onClick="ohshit" />
+
+        <TextView
+            android:layout_width="243dp"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/comments"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="2.63" />
+
+
     </LinearLayout>
 </RelativeLayout>

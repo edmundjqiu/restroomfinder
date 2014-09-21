@@ -14,16 +14,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author Brian Yang
  */
 public class DataLoader {
 
-    public Restroom[] load() {
-        new FetchRestroomTask().execute();
+    private Restroom[] restrooms;
+
+    public void load(String url) {
+        new FetchRestroomTask().execute(url);
     }
 
     public class FetchRestroomTask extends AsyncTask<String, Void, Restroom[]> {
@@ -46,7 +46,7 @@ public class DataLoader {
 
             try {
 
-                final String RESTROOM_API = "http://unhack.brianyang.me/unhack.json";
+                final String RESTROOM_API = params[0];
 
                 Uri builtUri = Uri.parse(RESTROOM_API);
 
@@ -106,58 +106,67 @@ public class DataLoader {
 
             return null;
         }
-    }
 
-    private Restroom[] getRestroomDataFromJson(String restroomJsonStr, int limit)
-            throws JSONException {
+        private Restroom[] getRestroomDataFromJson(String restroomJsonStr, int limit)
+                throws JSONException {
 
-        // These are the names of the JSON objects that need to be extracted.
-        final String RR_LIST = "restrooms";
-        final String RR_NAME = "name";
-        final String RR_LAT = "lat";
-        final String RR_LONG = "long";
-        final String RR_FREE = "free";
-        final String RR_REVS = "reviews";
+            // These are the names of the JSON objects that need to be extracted.
+            final String RR_LIST = "restrooms";
+            final String RR_NAME = "name";
+            final String RR_LAT = "lat";
+            final String RR_LONG = "long";
+            final String RR_FREE = "free";
+            final String RR_REVS = "reviews";
 
-        JSONObject restroomJson = new JSONObject(restroomJsonStr);
-        JSONArray restroomArray = restroomJson.getJSONArray(RR_LIST);
+            JSONObject restroomJson = new JSONObject(restroomJsonStr);
+            JSONArray restroomArray = restroomJson.getJSONArray(RR_LIST);
 
-        Restroom[] resultStrs = new Restroom[limit];
-        for(int i = 0; i < restroomArray.length(); i++) {
-            String name;
-            double lat;
-            double lon;
-            int free;
-            JSONArray reviews;
+            Restroom[] resultStrs = new Restroom[limit];
+            for(int i = 0; i < restroomArray.length(); i++) {
+                String name;
+                double lat;
+                double lon;
+                int free;
+                JSONArray reviews;
 
-            // Get the JSON object representing the day
-            JSONObject restroom = restroomArray.getJSONObject(i);
+                // Get the JSON object representing the day
+                JSONObject restroom = restroomArray.getJSONObject(i);
 
-            // The date/time is returned as a long.  We need to convert that
-            // into something human-readable, since most people won't read "1400356800" as
-            // "this saturday".
-            name = restroom.getString(RR_NAME);
-            lat = restroom.getDouble(RR_LAT);
-            lon = restroom.getDouble(RR_LONG);
-            free = restroom.getInt(RR_FREE);
+                // The date/time is returned as a long.  We need to convert that
+                // into something human-readable, since most people won't read "1400356800" as
+                // "this saturday".
+                name = restroom.getString(RR_NAME);
+                lat = restroom.getDouble(RR_LAT);
+                lon = restroom.getDouble(RR_LONG);
+                free = restroom.getInt(RR_FREE);
 
-            reviews = restroom.getJSONArray(RR_REVS);
+                reviews = restroom.getJSONArray(RR_REVS);
 
-            RestroomReview[] reviewsList = new RestroomReview[reviews.length()];
-            for (int j = 0; j < reviews.length(); j++) {
-                JSONObject reviewObject = reviews.getJSONObject(j);
-                String reviewer = reviewObject.getString("reviewer");
-                String date = reviewObject.getString("date");
-                int rating = reviewObject.getInt("rating");
-                String content = reviewObject.getString("content");
-                RestroomReview currentReview = new RestroomReview(reviewer, date, rating, content);
+                RestroomReview[] reviewsList = new RestroomReview[reviews.length()];
+                for (int j = 0; j < reviews.length(); j++) {
+                    JSONObject reviewObject = reviews.getJSONObject(j);
+                    String reviewer = reviewObject.getString("reviewer");
+                    String date = reviewObject.getString("date");
+                    int rating = reviewObject.getInt("rating");
+                    String content = reviewObject.getString("content");
+                    RestroomReview currentReview = new RestroomReview(reviewer, date, rating, content);
+                }
+
+                Restroom currentRestroom = new Restroom(name, lat, lon, free, reviewsList);
+                resultStrs[i] = currentRestroom;
+
             }
 
-            Restroom currentRestroom = new Restroom(name, lat, lon, free, reviewsList);
-            resultStrs[i] = currentRestroom;
+            return resultStrs;
+
 
         }
 
-        return resultStrs;
+        @Override
+        protected void onPostExecute(Restroom[] result) {
+            restrooms = result;
+        }
     }
+
+
 }
